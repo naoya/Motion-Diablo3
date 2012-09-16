@@ -7,8 +7,6 @@ module Diablo3
       json = nil
 
       BW::HTTP.get(tag.profile_url) do |response|
-        # puts "[DEBUG] status code: " + response.status_code.to_s
-
         if response.ok?
           json = BW::JSON.parse(response.body.to_str)
           career = self.new(tag, json)

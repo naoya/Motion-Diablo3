@@ -6,6 +6,7 @@ class AppDelegate
           c.battletag = BattleTag.new('Espo', '1977')
         end
       )
+      w.rootViewController.navigationBar.barStyle = UIBarStyleBlack
       w.makeKeyAndVisible
     end
   end

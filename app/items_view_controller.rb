@@ -22,7 +22,8 @@ class ItemsViewController < UITableViewController
     'yellow' => UIColor.yellowColor,
     'blue'   => UIColor.blueColor,
     'white'  => UIColor.whiteColor,
-    'orange' => UIColor.orangeColor
+    'orange' => UIColor.orangeColor,
+    'green'  => UIColor.greenColor
   }
 
   def viewDidLoad
@@ -37,8 +38,6 @@ class ItemsViewController < UITableViewController
 
     hero.fetch_detail do |detail|
       @items = detail.items
-      puts @items['head'].name
-
       view.reloadData
     end
   end

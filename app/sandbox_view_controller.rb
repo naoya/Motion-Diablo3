@@ -3,7 +3,8 @@ class SandboxViewController < UIViewController
     super
 
     begin
-      Diablo3::Career.fetch('Espo', '1977') do |career|
+      tag = BattleTag.new('Espo', '1977')
+      Diablo3::Career.fetch(tag) do |career|
         career.heroes.first.fetch_detail do |detail|
           puts detail.name
           detail.items.keys.each do |key|
@@ -15,7 +16,7 @@ class SandboxViewController < UIViewController
           end
         end
       end
-    rescue e
+    rescue => e
       Alert(e)
     end
 

@@ -4,8 +4,6 @@ module Diablo3
 
     def self.fetch(tag, hero_id, &block)
       BW::HTTP.get(tag.hero_url(hero_id)) do |response|
-        puts response.status_code
-
         if response.ok?
           json = BW::JSON.parse(response.body.to_str)
           block.call(self.new(json))
