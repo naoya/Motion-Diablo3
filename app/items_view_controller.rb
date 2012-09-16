@@ -3,6 +3,8 @@ class ItemsViewController < UITableViewController
   attr_accessor :hero
 
   @@order = [
+    'mainHand',
+    'offHand',
     'head',
     'torso',
     'feet',
@@ -10,8 +12,6 @@ class ItemsViewController < UITableViewController
     'shoulders',
     'legs',
     'bracers',
-    'mainHand',
-    'offHand',
     'waist',
     'rightFinger',
     'leftFinger',

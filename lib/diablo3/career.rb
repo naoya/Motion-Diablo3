@@ -3,20 +3,15 @@ module Diablo3
   class Career
     attr_reader :battletag, :heroes
 
-    def self.fetch(name, code, &block)
-      # この辺の変数の生存時間が怪しいのかも...
-      tag  = BattleTag.new(name, code)
+    def self.fetch(tag, &block)
       json = nil
 
       BW::HTTP.get(tag.profile_url) do |response|
-        puts "[DEBUG] status code: " + response.status_code.to_s
+        # puts "[DEBUG] status code: " + response.status_code.to_s
 
         if response.ok?
           json = BW::JSON.parse(response.body.to_str)
-          puts "[DEBUG] finished parsing json"
           career = self.new(tag, json)
-          puts "[DEBUG] finished creating a career object"
-
           block.call(career)
         else
           raise response.status_code
@@ -25,21 +20,33 @@ module Diablo3
       self
     end
 
+    ## 同期型 (デバッグ用)
+    def self.get(tag)
+      json = nil
+
+      error_ptr = Pointer.new(:object)
+      data = NSData.alloc.initWithContentsOfURL(NSURL.URLWithString(tag.profile_url), options:NSDataReadingUncached, error:error_ptr)
+      unless data
+        raise error_ptr[0]
+      end
+
+      json = NSJSONSerialization.JSONObjectWithData(data, options:0, error:error_ptr)
+      unless json
+        raise error_ptr[0]
+      end
+      return self.new(tag, json)
+    end
+
     def initialize(tag, json)
-      puts "[DEBUG] initializing..."
-
-      ## ここで時々落ちる... 変数(tag)の生存区間の問題か?
       @battletag = tag
-
-      puts "[DEBUG] starting map..."
-      @heroes    = json['heroes'].map {|h| Hero.new(h) }
-      puts "[DEBUG] done map..."
+      @heroes    = json['heroes'].map {|h| Hero.new(tag, h) }
     end
 
     class Hero
-      attr_reader :name, :id, :level, :hardcore, :gender, :dead, :classname
+      attr_reader :battletag, :name, :id, :level, :hardcore, :gender, :dead, :classname
 
-      def initialize(json)
+      def initialize(tag, json)
+        @battletag  = tag
         @name       = json['name']
         @id         = json['id']
         @level      = json['level']
@@ -50,7 +57,7 @@ module Diablo3
       end
 
       def fetch_detail(&block)
-        Diablo3::Hero.fetch('Espo', '1977', self.id) do |hero|
+        Diablo3::Hero.fetch(self.battletag, self.id) do |hero|
           block.call(hero)
         end
       end

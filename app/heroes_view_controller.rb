@@ -1,37 +1,33 @@
 # -*- coding: utf-8 -*-
 class HeroesViewController < UITableViewController
+  attr_accessor :battletag
+
   def viewDidLoad
     super
-
     @heroes = nil
 
-    self.navigationItem.title = "Espo#1977"
+    self.navigationItem.title = self.battletag.to_s
     self.view.backgroundColor = UIColor.whiteColor
 
-    Diablo3::Career.fetch('Espo', '1977') do |career|
-      puts "[DEBUG] callback"
+    Diablo3::Career.fetch(self.battletag) do |career|
       @heroes = career.heroes
-
-      puts "[DEBUG] pushed heroes"
-      puts @heroes.first.name
-
       view.reloadData
-      # App.alert("hige")
-      puts "[DEBUG] reloaded DATA"
-
-      ## この関数抜けるときに落ちてるのかなあ ... "っぽい"
     end
 
-    # ここまでこない
-    puts "test test"
+    ## デバッグ用(でした)
+    # Dispatch::Queue.concurrent.async do
+    #   career = Diablo3::Career.get('Espo', '1977')
+    #   Dispatch::Queue.main.sync do
+    #     @heroes = career.heroes
+    #     view.reloadData
+    #   end
+    # end
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
-    puts "[DEBUG] return number of rows"
     if @heroes.nil?
       return 0
     else
-      puts @heroes.length
       return @heroes.length
     end
   end

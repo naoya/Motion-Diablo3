@@ -1,6 +1,7 @@
 module Diablo3
   class Item
     attr_reader :name, :icon, :display_color, :tooltip_params, :required_level, :item_level, :bonus_affixes
+
     def self.fetch(hash, &block)
       BW::HTTP.get("http://us.battle.net/api/d3/data/item/#{hash}") do |response|
         if response.ok?
@@ -12,6 +13,7 @@ module Diablo3
       end
     end
 
+    # FIXME: not DRY
     def image_url(size = 'small')
       return "http://us.media.blizzard.com/d3/icons/items/#{size}/#{self.icon}.png"
     end

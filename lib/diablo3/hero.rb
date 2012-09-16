@@ -2,8 +2,7 @@ module Diablo3
   class Hero
     attr_reader :id, :name, :gender, :level, :hardcore, :skills, :items
 
-    def self.fetch(name, code, hero_id, &block)
-      tag = BattleTag.new(name, code)
+    def self.fetch(tag, hero_id, &block)
       BW::HTTP.get(tag.hero_url(hero_id)) do |response|
         puts response.status_code
 
@@ -39,6 +38,7 @@ module Diablo3
         @tooltip_params = json['tooltipParams']
       end
 
+      ## FIXME: not DRY
       def image_url(size = 'small')
         return "http://us.media.blizzard.com/d3/icons/items/#{size}/#{self.icon}.png"
       end
