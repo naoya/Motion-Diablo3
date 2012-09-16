@@ -7,7 +7,8 @@ class HeroesViewController < UITableViewController
     @heroes = nil
 
     self.navigationItem.title = self.battletag.to_s
-    self.view.backgroundColor = UIColor.whiteColor
+    self.view.backgroundColor = UIColor.blackColor
+    self.view.separatorColor  = UIColor.darkGrayColor
 
     Diablo3::Career.fetch(self.battletag) do |career|
       @heroes = career.heroes
@@ -37,6 +38,7 @@ class HeroesViewController < UITableViewController
       UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:'heroCell')
     cell.accessoryType  = UITableViewCellAccessoryDisclosureIndicator
     cell.textLabel.text = @heroes[indexPath.row].name
+    cell.textLabel.textColor = UIColor.whiteColor
     cell.detailTextLabel.text = "Level " + @heroes[indexPath.row].level.to_s + " " + @heroes[indexPath.row].classname.capitalize
     cell
   end

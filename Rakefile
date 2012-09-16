@@ -3,8 +3,9 @@ $:.unshift("/Library/RubyMotion/lib")
 require 'motion/project'
 
 require 'bubble-wrap'
-require 'bubble-wrap/core'
-require 'bubble-wrap/http'
+require 'bubble-wrap/all'
+# require 'bubble-wrap/core'
+# require 'bubble-wrap/http'
 require './lib/diablo3.rb'
 
 Motion::Project::App.setup do |app|

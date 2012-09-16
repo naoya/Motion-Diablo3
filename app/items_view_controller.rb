@@ -18,11 +18,19 @@ class ItemsViewController < UITableViewController
     'neck'
   ]
 
+  @@string2color = {
+    'yellow' => UIColor.yellowColor,
+    'blue'   => UIColor.blueColor,
+    'white'  => UIColor.whiteColor,
+    'orange' => UIColor.orangeColor
+  }
+
   def viewDidLoad
     super
 
     self.navigationItem.title = hero.name
-    self.view.backgroundColor = UIColor.whiteColor
+    self.view.backgroundColor = UIColor.blackColor
+    self.view.separatorColor  = UIColor.darkGrayColor
 
     @items = {}
     @images = {}
@@ -46,13 +54,14 @@ class ItemsViewController < UITableViewController
 
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
     cell = tableView.dequeueReusableCellWithIdentifier('itemCell') ||
-      UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:'itemCell')
+      ItemCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:'itemCell')
 
     part = @@order[indexPath.row]
     cell.detailTextLabel.text = part
     if @items[part]
       cell.accessoryType  = UITableViewCellAccessoryDisclosureIndicator
       cell.textLabel.text = @items[part].name
+      cell.textLabel.textColor = @@string2color[@items[part].display_color]
 
       ## 画像読み込み with GCD
       if not @images[part]
@@ -77,5 +86,10 @@ class ItemsViewController < UITableViewController
   end
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)
+    # TODO
+  end
+
+  def tableView(tableView, heightForRowAtIndexPath:indexPath)
+    return 64 + 2
   end
 end
