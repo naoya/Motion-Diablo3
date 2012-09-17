@@ -1,6 +1,6 @@
 module Diablo3
   class Hero
-    attr_reader :id, :name, :gender, :level, :hardcore, :skills, :items
+    attr_reader :id, :name, :gender, :level, :hardcore, :skills, :items, :classname
 
     def self.fetch(tag, hero_id, &block)
       BW::HTTP.get(tag.hero_url(hero_id)) do |response|
@@ -15,12 +15,13 @@ module Diablo3
     end
 
     def initialize(json)
-      @id       = json['id']
-      @name     = json['name']
-      @gender   = json['gender']
-      @level    = json['level']
-      @hardcore = json['hardcore']
-      @skills   = json['skills']
+      @id        = json['id']
+      @name      = json['name']
+      @gender    = json['gender']
+      @level     = json['level']
+      @hardcore  = json['hardcore']
+      @skills    = json['skills']
+      @classname = json['class']
 
       @items = {}
       json['items'].each {|k,v| @items[k] = Item.new(v) }
